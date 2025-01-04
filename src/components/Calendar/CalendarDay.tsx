@@ -30,19 +30,14 @@ export function CalendarDay({
     return (
         <button
             onClick={onClick}
-            className={`
-        w-full h-24 transition-colors p-2
-        hover:bg-gray-50 relative
-        ${isCurrentDay ? 'bg-blue-50' : 'bg-white'}
-        ${isOtherMonth ? 'bg-gray-50' : ''}
-      `}
+            className={`w-full h-24 transition-colors duration-200 p-2 hover:bg-gray-50 relative ${
+                isCurrentDay ? 'bg-gray-100 hover:bg-gray-200' : 'bg-white'
+            }`}
         >
             <span
-                className={`
-        absolute top-1 left-2 text-sm
-        ${isCurrentDay ? 'text-blue-600 font-semibold' : ''}
-        ${isOtherMonth ? 'text-gray-400' : 'text-gray-700'}
-      `}
+                className={`absolute top-1 right-2 text-sm ${
+                    isOtherMonth ? 'text-gray-400' : 'text-gray-700'
+                }`}
             >
                 {date.getDate()}
             </span>
@@ -54,11 +49,9 @@ export function CalendarDay({
                         return (
                             <div
                                 key={habit.id}
-                                className={`
-                w-6 h-6 rounded-md flex items-center justify-center
-                ${status.completed ? 'text-white' : 'bg-white'}
-                border-2
-              `}
+                                className={`w-6 h-6 rounded-md flex items-center justify-center ${
+                                    status.completed ? 'text-white' : 'bg-white'
+                                } border-2`}
                                 style={{
                                     backgroundColor: status.completed
                                         ? habit.color

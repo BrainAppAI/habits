@@ -1,3 +1,6 @@
+import Icons from '@/assets/icons'
+import { Button } from '../ui/button'
+
 interface CalendarHeaderProps {
     currentDate: Date
     onPrevMonth: () => void
@@ -11,13 +14,14 @@ export function CalendarHeader({
 }: CalendarHeaderProps) {
     return (
         <div className="flex items-center gap-4">
-            <button
+            <Button
+                variant="tertiary"
+                size="sm"
                 onClick={onPrevMonth}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                 aria-label="Previous month"
             >
-                <div className="w-6 h-6 text-gray-600">left</div>
-            </button>
+                <Icons.ArrowLeft size={16} />
+            </Button>
 
             <h1 className="text-[32px] text-gray-800 space-x-2">
                 <span className="font-semibold">
@@ -32,13 +36,14 @@ export function CalendarHeader({
                 </span>
             </h1>
 
-            <button
+            <Button
+                variant="tertiary"
+                size="sm"
                 onClick={onNextMonth}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                 aria-label="Next month"
             >
-                <div className="w-6 h-6 text-gray-600">right</div>
-            </button>
+                <Icons.ArrowRight size={16} />
+            </Button>
         </div>
     )
 }

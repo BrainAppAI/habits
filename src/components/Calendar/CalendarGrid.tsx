@@ -52,11 +52,11 @@ export function CalendarGrid({
 
     return (
         <div>
-            <div className="grid grid-cols-7 border-b border-gray-200 bg-yellow-200">
+            <div className="grid grid-cols-7 border-b border-gray-200 bg-slate-50">
                 {dayNames.map((day) => (
                     <div
                         key={day}
-                        className="text-center font-semibold text-gray-600 text-sm pb-4"
+                        className="text-center font-normal text-slate-700 text-sm pb-1"
                     >
                         {day}
                     </div>

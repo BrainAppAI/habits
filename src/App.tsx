@@ -5,6 +5,7 @@ import { AddHabitModal } from './components/Habits/AddHabitModal'
 import { DayHabitsModal } from './components/Habits/DayHabitsModal'
 import { HabitsLegend } from './components/Habits/HabitsLegend'
 import { Habit, HabitCompletion } from './types/habit'
+import { Button } from './components/ui/button'
 
 const MAX_HABITS = 10
 
@@ -68,21 +69,21 @@ const App = () => {
             <div className="max-w-7xl mx-auto">
                 <div className="space-y-6">
                     <div className="bg-white shadow-lg">
-                        <div className="flex justify-between bg-yellow-200 items-center py-6 px-4">
+                        <div className="flex justify-between bg-slate-50 items-center py-6 px-4">
                             <CalendarHeader
                                 currentDate={currentDate}
                                 onPrevMonth={handlePrevMonth}
                                 onNextMonth={handleNextMonth}
                             />
-                            <button
+                            <Button
                                 onClick={() => setIsAddHabitModalOpen(true)}
-                                className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
                                 disabled={habits.length >= MAX_HABITS}
+                                variant="tertiary"
                             >
-                                Add Habit{' '}
+                                Manage Habits{' '}
                                 {habits.length > 0 &&
                                     `(${habits.length}/${MAX_HABITS})`}
-                            </button>
+                            </Button>
                         </div>
                         <CalendarGrid
                             currentDate={currentDate}
