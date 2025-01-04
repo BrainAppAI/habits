@@ -6,6 +6,7 @@ import { DayHabitsModal } from './components/Habits/DayHabitsModal'
 import { HabitsLegend } from './components/Habits/HabitsLegend'
 import { Habit, HabitCompletion } from './types/habit'
 import { Button } from './components/ui/button'
+import Icons from './assets/icons'
 
 const MAX_HABITS = 10
 
@@ -67,37 +68,36 @@ const App = () => {
     return (
         <div className="min-h-screen bg-indigo-100 p-8">
             <div className="max-w-7xl mx-auto">
-                <div className="space-y-6">
-                    <div className="bg-white shadow-lg">
-                        <div className="flex justify-between bg-slate-50 items-center py-6 px-4">
-                            <CalendarHeader
-                                currentDate={currentDate}
-                                onPrevMonth={handlePrevMonth}
-                                onNextMonth={handleNextMonth}
-                            />
-                            <Button
-                                onClick={() => setIsAddHabitModalOpen(true)}
-                                disabled={habits.length >= MAX_HABITS}
-                                variant="tertiary"
-                            >
-                                Manage Habits{' '}
-                                {habits.length > 0 &&
-                                    `(${habits.length}/${MAX_HABITS})`}
-                            </Button>
-                        </div>
-                        <CalendarGrid
+                <div className="bg-white shadow-lg">
+                    <div className="flex justify-between bg-slate-50 items-center py-6 px-4">
+                        <CalendarHeader
                             currentDate={currentDate}
-                            habits={habits}
-                            completions={completions}
-                            onSelectDate={setSelectedDate}
+                            onPrevMonth={handlePrevMonth}
+                            onNextMonth={handleNextMonth}
                         />
+                        <Button
+                            onClick={() => setIsAddHabitModalOpen(true)}
+                            disabled={habits.length >= MAX_HABITS}
+                            variant="tertiary"
+                        >
+                            Manage Habits{' '}
+                            {habits.length > 0 &&
+                                `(${habits.length}/${MAX_HABITS})`}
+                        </Button>
                     </div>
-
-                    {habits.length > 0 && (
-                        <div className="bg-white rounded-xl shadow-lg p-6">
-                            <HabitsLegend habits={habits} />
+                    <CalendarGrid
+                        currentDate={currentDate}
+                        habits={habits}
+                        completions={completions}
+                        onSelectDate={setSelectedDate}
+                    />
+                    <div className="bg-gray-900 flex justify-start px-6 py-8">
+                        {/* Habits Full Logo */}
+                        <div className="w-fit flex flex-col gap-2.5">
+                            <Icons.HabitsLogo />
                         </div>
-                    )}
+                        <HabitsLegend habits={habits} />
+                    </div>
                 </div>
             </div>
 
