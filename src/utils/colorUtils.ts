@@ -1,10 +1,47 @@
 export const HABIT_COLORS = [
-  '#D50000', '#E67C73', '#F4511E', '#F6BF26', 
-  '#33B679', '#0B8043', '#039BE5', '#3F51B5', '#7986CB', '#8E24AA'
-] as const;
+    'INDIGO',
+    'GREEN',
+    'PINK',
+    'ORANGE',
+    'YELLOW',
+    'RED',
+    'CYAN',
+    'PURPLE',
+] as const
 
-export type HabitColor = typeof HABIT_COLORS[number];
+export type HabitColor = (typeof HABIT_COLORS)[number]
 
-export function getAvailableColors(usedColors: string[]): HabitColor[] {
-  return HABIT_COLORS.filter(color => !usedColors.includes(color));
+export const COLORS_TO_CLASS = {
+    INDIGO: {
+        BG: 'bg-indigo-400',
+        BORDER: 'border-indigo-300',
+    },
+    GREEN: {
+        BG: 'bg-green-400',
+        BORDER: 'border-green-300',
+    },
+    PINK: {
+        BG: 'bg-pink-400',
+        BORDER: 'border-pink-300',
+    },
+    ORANGE: {
+        BG: 'bg-orange-400',
+        BORDER: 'border-orange-300',
+    },
+    YELLOW: {
+        BG: 'bg-yellow-400',
+        BORDER: 'border-yellow-300',
+    },
+    RED: {
+        BG: 'bg-red-400',
+        BORDER: 'border-red-300',
+    },
+    CYAN: {
+        BG: 'bg-cyan-400',
+        BORDER: 'border-cyan-300',
+    },
+    PURPLE: {
+        BG: 'bg-purple-400',
+        BORDER: 'border-purple-300',
+    },
 }

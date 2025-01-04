@@ -6,7 +6,6 @@ import { DayHabitsModal } from './components/Habits/DayHabitsModal'
 import { HabitsLegend } from './components/Habits/HabitsLegend'
 import { Habit, HabitCompletion } from './types/habit'
 import { Button } from './components/ui/button'
-import Icons from './assets/icons'
 
 const MAX_HABITS = 10
 
@@ -91,13 +90,8 @@ const App = () => {
                         completions={completions}
                         onSelectDate={setSelectedDate}
                     />
-                    <div className="bg-gray-900 flex justify-start px-6 py-8">
-                        {/* Habits Full Logo */}
-                        <div className="w-fit flex flex-col gap-2.5">
-                            <Icons.HabitsLogo />
-                        </div>
-                        <HabitsLegend habits={habits} />
-                    </div>
+
+                    <HabitsLegend habits={habits} />
                 </div>
             </div>
 

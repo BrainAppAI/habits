@@ -1,6 +1,10 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { Habit } from '../../types/habit'
-import { HABIT_COLORS, getAvailableColors } from '../../utils/colorUtils'
+import {
+    COLORS_TO_CLASS,
+    HABIT_COLORS,
+    HabitColor,
+} from '../../utils/colorUtils'
 
 interface AddHabitModalProps {
     isOpen: boolean
@@ -9,18 +13,9 @@ interface AddHabitModalProps {
     existingHabits: Habit[]
 }
 
-export function AddHabitModal({
-    isOpen,
-    onClose,
-    onAdd,
-    existingHabits,
-}: AddHabitModalProps) {
+export function AddHabitModal({ isOpen, onClose, onAdd }: AddHabitModalProps) {
     const [title, setTitle] = useState('')
-    const availableColors = useMemo(
-        () => getAvailableColors(existingHabits.map((h) => h.color)),
-        [existingHabits]
-    )
-    const [color, setColor] = useState(availableColors[0] ?? HABIT_COLORS[0])
+    const [color, setColor] = useState<HabitColor>(HABIT_COLORS[0])
 
     if (!isOpen) return null
 
@@ -28,7 +23,7 @@ export function AddHabitModal({
         e.preventDefault()
         onAdd({ title, color })
         setTitle('')
-        setColor(availableColors[0] ?? HABIT_COLORS[0])
+        setColor(color || HABIT_COLORS[0])
         onClose()
     }
 
@@ -63,34 +58,22 @@ export function AddHabitModal({
                         </label>
                         <div className="flex gap-2 flex-wrap">
                             {HABIT_COLORS.map((c) => {
-                                const isAvailable = availableColors.includes(c)
+                                const bgColor = COLORS_TO_CLASS[c].BG
+                                const isSelected = color === c
                                 return (
                                     <button
                                         key={c}
                                         type="button"
-                                        onClick={() =>
-                                            isAvailable && setColor(c)
-                                        }
-                                        className={`w-8 h-8 rounded-full border-2 transition-opacity
-                      ${color === c ? 'border-gray-900' : 'border-transparent'}
-                      ${
-                          !isAvailable
-                              ? 'opacity-30 cursor-not-allowed'
-                              : 'hover:opacity-80'
-                      }
-                    `}
-                                        style={{ backgroundColor: c }}
-                                        disabled={!isAvailable}
+                                        onClick={() => setColor(c)}
+                                        className={`w-8 h-8 rounded-lg transition-opacity ${bgColor} ${
+                                            isSelected
+                                                ? 'border-2 border-slate-700'
+                                                : ''
+                                        }`}
                                     />
                                 )
                             })}
                         </div>
-                        {availableColors.length === 0 && (
-                            <p className="text-sm text-red-500 mt-2">
-                                No colors available. Delete an existing habit to
-                                add a new one.
-                            </p>
-                        )}
                     </div>
                     <div className="flex justify-end gap-2">
                         <button
@@ -103,7 +86,6 @@ export function AddHabitModal({
                         <button
                             type="submit"
                             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                            disabled={availableColors.length === 0}
                         >
                             Add Habit
                         </button>
