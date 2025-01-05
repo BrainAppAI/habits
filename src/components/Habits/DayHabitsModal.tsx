@@ -1,4 +1,6 @@
+import { COLORS_TO_CLASS } from '@/utils/colorUtils'
 import { Habit, HabitCompletion } from '../../types/habit'
+import CheckMark from './CheckMark'
 
 interface DayHabitsModalProps {
     isOpen: boolean
@@ -34,9 +36,9 @@ export function DayHabitsModal({
                     </h2>
                     <button
                         onClick={onClose}
-                        className="p-1 hover:bg-gray-100 rounded-full"
+                        className="p-1 hover:bg-gray-100 rounded-md"
                     >
-                        <div className="w-5 h-5">x</div>
+                        <div className="w-5 h-5">Close</div>
                     </button>
                 </div>
                 <div className="space-y-3">
@@ -44,6 +46,7 @@ export function DayHabitsModal({
                         const completion = completions.find(
                             (c) => c.habitId === habit.id && c.date === dateStr
                         )
+                        const bgColor = COLORS_TO_CLASS[habit.color].BG
                         return (
                             <button
                                 key={habit.id}
@@ -58,23 +61,14 @@ export function DayHabitsModal({
                             >
                                 <span className="flex items-center gap-3">
                                     <div
-                                        className="w-4 h-4 rounded-full"
-                                        style={{ backgroundColor: habit.color }}
+                                        className={`w-4 h-4 rounded-full ${bgColor}`}
                                     />
                                     {habit.title}
                                 </span>
-                                <div
-                                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center
-                  ${
-                      completion?.completed
-                          ? 'bg-green-500 border-green-500'
-                          : 'border-gray-300'
-                  }`}
-                                >
-                                    {completion?.completed && (
-                                        <div className="w-4 h-4 text-white" />
-                                    )}
-                                </div>
+                                <CheckMark
+                                    isChecked={Boolean(completion?.completed)}
+                                    color={habit.color}
+                                />
                             </button>
                         )
                     })}

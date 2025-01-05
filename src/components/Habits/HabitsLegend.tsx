@@ -1,6 +1,6 @@
 import Icons from '@/assets/icons'
 import { Habit } from '../../types/habit'
-import { COLORS_TO_CLASS, HabitColor } from '@/utils/colorUtils'
+import CheckMark from './CheckMark'
 
 interface HabitsLegendProps {
     habits: Habit[]
@@ -22,27 +22,6 @@ export function HabitsLegend({ habits }: HabitsLegendProps) {
                     </div>
                 ))}
             </div>
-        </div>
-    )
-}
-
-const CheckMark = ({
-    isChecked = true,
-    color,
-}: {
-    isChecked: boolean
-    color: HabitColor
-}) => {
-    if (!color) return null
-    const bgBorderClasses = `${
-        isChecked ? COLORS_TO_CLASS[color].BG : 'bg-white'
-    } ${COLORS_TO_CLASS[color].BORDER}`
-
-    return (
-        <div
-            className={`w-6 h-6 p-1.5 flex justify-center items-center rounded-md border-2 ${bgBorderClasses}`}
-        >
-            <Icons.Check />
         </div>
     )
 }

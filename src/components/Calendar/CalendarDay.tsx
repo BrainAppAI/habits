@@ -1,5 +1,6 @@
 import { Habit, HabitCompletion } from '../../types/habit'
 import { isToday } from './dateUtils'
+import CheckMark from '../Habits/CheckMark'
 
 interface CalendarDayProps {
     date: Date
@@ -47,22 +48,10 @@ export function CalendarDay({
                     habits.map((habit) => {
                         const status = getHabitStatus(habit)
                         return (
-                            <div
-                                key={habit.id}
-                                className={`w-6 h-6 rounded-md flex items-center justify-center ${
-                                    status.completed ? 'text-white' : 'bg-white'
-                                } border-2`}
-                                style={{
-                                    backgroundColor: status.completed
-                                        ? habit.color
-                                        : 'white',
-                                    borderColor: habit.color,
-                                }}
-                            >
-                                {status.completed && (
-                                    <div className="w-4 h-4" />
-                                )}
-                            </div>
+                            <CheckMark
+                                isChecked={status.completed}
+                                color={habit.color}
+                            />
                         )
                     })}
             </div>
