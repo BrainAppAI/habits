@@ -82,6 +82,7 @@ const App = () => {
                     habits={habits}
                     completions={completions}
                     onSelectDate={setSelectedDate}
+                    onToggleHabit={handleToggleHabit}
                 />
 
                 <HabitsLegend habits={habits} />

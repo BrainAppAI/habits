@@ -8,6 +8,7 @@ interface CalendarDayProps {
     habits: Habit[]
     completions: HabitCompletion[]
     onClick: () => void
+    onToggleHabit: (habitId: string, date: string, completed: boolean) => void
 }
 
 export function CalendarDay({
@@ -16,6 +17,7 @@ export function CalendarDay({
     habits,
     completions,
     onClick,
+    onToggleHabit,
 }: CalendarDayProps) {
     const dateStr = date.toISOString().split('T')[0]
     const isCurrentDay = isToday(date)
@@ -47,10 +49,21 @@ export function CalendarDay({
                 {!isOtherMonth &&
                     habits.map((habit) => {
                         const status = getHabitStatus(habit)
+
+                        const handleClickCheckMark = (
+                            e: React.MouseEvent<HTMLElement>
+                        ) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            onToggleHabit(habit.id, dateStr, !status.completed)
+                        }
+
                         return (
                             <CheckMark
                                 isChecked={status.completed}
                                 color={habit.color}
+                                onClick={handleClickCheckMark}
+                                as="button"
                             />
                         )
                     })}

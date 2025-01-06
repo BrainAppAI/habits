@@ -13,6 +13,7 @@ interface CalendarGridProps {
     habits: Habit[]
     completions: HabitCompletion[]
     onSelectDate: (date: Date) => void
+    onToggleHabit: (habitId: string, date: string, completed: boolean) => void
 }
 
 export function CalendarGrid({
@@ -20,6 +21,7 @@ export function CalendarGrid({
     habits,
     completions,
     onSelectDate,
+    onToggleHabit,
 }: CalendarGridProps) {
     const startDate = startOfMonth(currentDate)
     const endDate = endOfMonth(currentDate)
@@ -81,6 +83,7 @@ export function CalendarGrid({
                             habits={habits}
                             completions={completions}
                             onClick={() => onSelectDate(date)}
+                            onToggleHabit={onToggleHabit}
                         />
                     </div>
                 ))}
