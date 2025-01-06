@@ -33,7 +33,7 @@ export function CalendarDay({
     return (
         <button
             onClick={onClick}
-            className={`w-full h-full transition-colors duration-200 p-2 hover:bg-gray-50 relative ${
+            className={`flex w-full h-full transition-colors duration-200 p-2 hover:bg-gray-50 relative justify-start    items-end ${
                 isCurrentDay ? 'bg-gray-100 hover:bg-gray-200' : 'bg-white'
             }`}
         >
@@ -45,7 +45,7 @@ export function CalendarDay({
                 {date.getDate()}
             </span>
 
-            <div className="flex flex-wrap gap-1 mt-6">
+            <div className="flex flex-wrap gap-1">
                 {!isOtherMonth &&
                     habits.map((habit) => {
                         const status = getHabitStatus(habit)
