@@ -61,12 +61,12 @@ export function AddHabitModal({
                 <DialogHeader className="items-start justify-start w-full px-6">
                     <DialogTitle className="text-[32px]">Habits</DialogTitle>
                     <DialogDescription className="px-0 text-sm font-medium text-slate-600 -mt-1">
-                        8/8 habits added
+                        {habits.length}/8 habits added
                     </DialogDescription>
                 </DialogHeader>
                 <form
                     onSubmit={handleSubmit}
-                    className="w-full flex flex-col items-center justify-center px-6 pb-6"
+                    className="w-full flex flex-col items-center justify-center px-4 pb-6"
                 >
                     <div className="w-full flex flex-col gap-2 mb-6">
                         {habits.map((habit) => {

@@ -1,6 +1,9 @@
-import { COLORS_TO_CLASS } from '@/utils/colorUtils'
 import { Habit, HabitCompletion } from '../../types/habit'
 import CheckMark from './CheckMark'
+import { Button } from '../ui/button'
+import { Dialog, DialogContent, DialogTitle } from '../ui/dialog'
+import { DialogHeader } from '../ui/dialog'
+import Icons from '@/assets/icons'
 
 interface DayHabitsModalProps {
     isOpen: boolean
@@ -24,29 +27,33 @@ export function DayHabitsModal({
     const dateStr = date.toISOString().split('T')[0]
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md">
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-bold">
+        <Dialog onOpenChange={(s) => (!s ? onClose() : null)} open={isOpen}>
+            <DialogContent className="sm:max-w-[420px]">
+                <Button
+                    onClick={onClose}
+                    variant="tertiary"
+                    size="sm"
+                    className="absolute top-4 right-4"
+                >
+                    <span>
+                        <Icons.Close size={18} />
+                    </span>
+                </Button>
+                <DialogHeader className="items-start justify-start w-full px-6">
+                    <DialogTitle className="text-[32px]">
                         {date.toLocaleDateString('default', {
-                            month: 'long',
+                            month: 'short',
                             day: 'numeric',
                             year: 'numeric',
                         })}
-                    </h2>
-                    <button
-                        onClick={onClose}
-                        className="p-1 hover:bg-gray-100 rounded-md"
-                    >
-                        <div className="w-5 h-5">Close</div>
-                    </button>
-                </div>
-                <div className="space-y-3">
+                    </DialogTitle>
+                </DialogHeader>
+
+                <div className="w-full flex flex-col gap-2 mb-6 px-4">
                     {habits.map((habit) => {
                         const completion = completions.find(
                             (c) => c.habitId === habit.id && c.date === dateStr
                         )
-                        const bgColor = COLORS_TO_CLASS[habit.color].BG
                         return (
                             <button
                                 key={habit.id}
@@ -57,23 +64,36 @@ export function DayHabitsModal({
                                         !completion?.completed
                                     )
                                 }
-                                className="w-full flex items-center justify-between p-3 rounded-lg border hover:bg-gray-50"
+                                className="w-full group hover:bg-slate-50 rounded-lg p-2 transition-all ease-in-out duration-200 flex justify-between items-center group"
                             >
-                                <span className="flex items-center gap-3">
-                                    <div
-                                        className={`w-4 h-4 rounded-full ${bgColor}`}
+                                <div className="flex items-center gap-3 flex-grow overflow-hidden">
+                                    <CheckMark
+                                        isChecked={Boolean(
+                                            completion?.completed
+                                        )}
+                                        color={habit.color}
                                     />
-                                    {habit.title}
-                                </span>
-                                <CheckMark
-                                    isChecked={Boolean(completion?.completed)}
-                                    color={habit.color}
-                                />
+                                    <p
+                                        className={`text-sm font-medium line-clamp-1 text-slate-950 ${
+                                            completion?.completed
+                                                ? 'line-through'
+                                                : ''
+                                        }`}
+                                    >
+                                        {habit.title}
+                                    </p>
+                                </div>
                             </button>
                         )
                     })}
+
+                    {!habits.length ? (
+                        <p className="text-slate-400 text-sm text-center">
+                            No Habits yet.
+                        </p>
+                    ) : null}
                 </div>
-            </div>
-        </div>
+            </DialogContent>
+        </Dialog>
     )
 }
