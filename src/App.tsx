@@ -6,6 +6,7 @@ import { DayHabitsModal } from './components/Habits/DayHabitsModal'
 import { HabitsLegend } from './components/Habits/HabitsLegend'
 import { Habit, HabitCompletion } from './types/habit'
 import { Button } from './components/ui/button'
+import Icons from './assets/icons'
 
 const MAX_HABITS = 10
 
@@ -64,40 +65,31 @@ const App = () => {
         })
     }
 
-    return (
-        <div className="min-h-screen bg-indigo-100 p-8">
-            <div className="max-w-7xl mx-auto">
-                <div className="bg-white shadow-lg">
-                    <div className="flex justify-between bg-slate-50 items-center py-6 px-4">
-                        <CalendarHeader
-                            currentDate={currentDate}
-                            onPrevMonth={handlePrevMonth}
-                            onNextMonth={handleNextMonth}
-                        />
-                        <Button
-                            onClick={() => setIsAddHabitModalOpen(true)}
-                            disabled={habits.length >= MAX_HABITS}
-                            variant="tertiary"
-                        >
-                            Manage Habits{' '}
-                            {habits.length > 0 &&
-                                `(${habits.length}/${MAX_HABITS})`}
-                        </Button>
-                    </div>
-                    <CalendarGrid
-                        currentDate={currentDate}
-                        habits={habits}
-                        completions={completions}
-                        onSelectDate={setSelectedDate}
-                    />
+    const handleManageHabits = () => setIsAddHabitModalOpen(true)
 
-                    <HabitsLegend habits={habits} />
-                </div>
+    return (
+        <div className="min-h-screen p-10 bg-gradient-brain-dark">
+            <div className="h-[calc(100vh-5rem)] flex flex-col bg-white shadow-dialog overflow-hidden w-full mx-auto rounded-xl">
+                <Header
+                    currentDate={currentDate}
+                    onManageHabits={handleManageHabits}
+                    onClickPrevMonth={handlePrevMonth}
+                    onClickNextMonth={handleNextMonth}
+                />
+
+                <CalendarGrid
+                    currentDate={currentDate}
+                    habits={habits}
+                    completions={completions}
+                    onSelectDate={setSelectedDate}
+                />
+
+                <HabitsLegend habits={habits} />
             </div>
 
             <AddHabitModal
-                isOpen={isAddHabitModalOpen}
-                onClose={() => setIsAddHabitModalOpen(false)}
+                setShowModal={setIsAddHabitModalOpen}
+                showModal={isAddHabitModalOpen}
                 onAdd={handleAddHabit}
                 existingHabits={habits}
             />
@@ -113,5 +105,26 @@ const App = () => {
         </div>
     )
 }
+
+const Header: React.FC<{
+    currentDate: Date
+    onManageHabits: () => void
+    onClickPrevMonth: () => void
+    onClickNextMonth: () => void
+}> = ({ currentDate, onManageHabits, onClickPrevMonth, onClickNextMonth }) => (
+    <div className="flex justify-between bg-slate-50 items-center py-6 px-4">
+        <CalendarHeader
+            currentDate={currentDate}
+            onPrevMonth={onClickPrevMonth}
+            onNextMonth={onClickNextMonth}
+        />
+        <Button onClick={onManageHabits} variant="tertiary" size="sm">
+            <span className="sm:block hidden">Manage Habits</span>
+            <span className="sm:hidden block">
+                <Icons.Settings size={18} />
+            </span>
+        </Button>
+    </div>
+)
 
 export default App

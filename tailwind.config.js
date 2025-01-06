@@ -114,14 +114,41 @@ module.exports = {
                 'input-hover': '0px 4px 16px 0px rgba(2, 6, 23, 0.04)',
                 'card-light': '0px 4px 15px 0px rgba(0, 0, 0, 0.05)',
                 'card-md': '0px 0px 4px 0px rgba(0, 0, 0, 0.05)',
-                dialog: '0px 4px 8px 0px rgba(0, 0, 0, 0.05), 0px 8px 20px 0px rgba(0, 0, 0, 0.10)',
                 'source-card': '0px 2px 4px 0px rgba(15, 23, 42, 0.05)',
+
+                // New ones from design. File - Shadows
+                peck: '0px 3px 1px 0px rgba(0, 0, 0, 0.02), 0px 2px 1px 0px rgba(0, 0, 0, 0.01), 0px 1px 1px 0px rgba(0, 0, 0, 0.05)',
+                stub: '0px 1px 0px 0px rgba(0, 0, 0, 0.12), 0px 2px 2px 0px rgba(0, 0, 0, 0.08), 0px 2px 2px 0px rgba(0, 0, 0, 0.01), 0px 2px 4px 0px rgba(0, 0, 0, 0.04), 0px 1px 1px 0px rgba(0, 0, 0, 0.02)',
+                'stub-inset':
+                    '0px -16px 12px 0px rgba(0, 0, 0, 0.01) inset, 0px -8px 12px 0px rgba(0, 0, 0, 0.04) inset, 0px -1px 1px 0px rgba(0, 0, 0, 0.24) inset, 0px -1px 0px 0px rgba(0, 0, 0, 0.16) inset',
+                bubble: '2px 20px 16px 0px rgba(0, 0, 0, 0.04) inset, 2px 13px 5px 0px rgba(0, 0, 0, 0.01) inset, 2px 7px 16px 0px rgba(0, 0, 0, 0.04) inset, 2px 3px 6px 0px rgba(0, 0, 0, 0.06) inset, 2px 1px 8px 0px rgba(0, 0, 0, 0.08) inset, 0px 20px 6px 0px rgba(0, 0, 0, 0.01), 0px 13px 5px 0px rgba(0, 0, 0, 0.02), 0px 7px 4px 0px rgba(0, 0, 0, 0.02), 0px 3px 5px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.10)',
+                lozenge:
+                    '-0.5px 1px 8px 0px rgba(255, 255, 255, 0.20) inset, 0.5px 1px 1px 0px rgba(255, 255, 255, 0.30) inset, 0px -1px 1px 0px rgba(255, 255, 255, 0.30) inset, 0px -16px 8px 0px rgba(0, 0, 0, 0.01) inset, 0px -7px 12px 0px rgba(0, 0, 0, 0.04) inset, 0px -4px 8px 0px rgba(0, 0, 0, 0.08) inset, 0px -1px 1px 0px rgba(0, 0, 0, 0.16) inset, 0px 0px 1px 0px rgba(0, 0, 0, 0.16) inset',
+                raised: '0px 6px 3px 0px rgba(0, 0, 0, 0.04), 0px 2px 2px 0px rgba(0, 0, 0, 0.08), 0px 1px 1px 0px rgba(0, 0, 0, 0.08), 0px -4px 1px 0px rgba(0, 0, 0, 0.01), 0px -2px 1px 0px rgba(0, 0, 0, 0.04), 0px -1px 1px 0px rgba(0, 0, 0, 0.08), 0px 0px 1px 0px rgba(0, 0, 0, 0.08)',
+                popup: '0px 5px 2px 0px rgba(0, 0, 0, 0.01), 0px 3px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 1px 0px rgba(0, 0, 0, 0.08), 0px 0px 1px 0px rgba(0, 0, 0, 0.08)',
+                dialog: '0px 40px 80px 0px rgba(0, 0, 0, 0.01), 0px 80px 24px 0px rgba(0, 0, 0, 0.03), 0px 48px 24px 0px rgba(0, 0, 0, 0.04), 0px 20px 20px 0px rgba(0, 0, 0, 0.12), 0px 4px 12px 0px rgba(0, 0, 0, 0.14)',
+                'soft-inset':
+                    '0px 16px 8px 0px rgba(0, 0, 0, 0.01) inset, 0px 8px 16px 0px rgba(0, 0, 0, 0.04) inset, 0px 1px 2px 0px rgba(0, 0, 0, 0.12) inset',
+                'hard-inset':
+                    '0px 16px 8px 0px rgba(0, 0, 0, 0.04) inset, 0px 8px 16px 0px rgba(0, 0, 0, 0.12) inset, 0px 1px 4px 0px rgba(0, 0, 0, 0.24) inset',
+                'bottom-light':
+                    '0px -13px 5px 0px rgba(0, 0, 0, 0.01), 0px -8px 4px 0px rgba(0, 0, 0, 0.04), 0px -3px 3px 0px rgba(0, 0, 0, 0.08), 0px -1px 2px 0px rgba(0, 0, 0, 0.08)',
+                'top-light':
+                    '0px 13px 5px 0px rgba(0, 0, 0, 0.01), 0px 8px 4px 0px rgba(0, 0, 0, 0.04), 0px 3px 3px 0px rgba(0, 0, 0, 0.08), 0px 1px 2px 0px rgba(0, 0, 0, 0.08)',
+                'left-light':
+                    '8px 12px 4px 0px rgba(0, 0, 0, 0.01), 4px 8px 4px 0px rgba(0, 0, 0, 0.01), 2px 6px 4px 0px rgba(0, 0, 0, 0.04), 1px 2px 2px 0px rgba(0, 0, 0, 0.08), 0px 1px 1px 0px rgba(0, 0, 0, 0.08)',
+                'right-light':
+                    '-8px 12px 4px 0px rgba(0, 0, 0, 0.01), -4px 8px 4px 0px rgba(0, 0, 0, 0.01), -2px 6px 4px 0px rgba(0, 0, 0, 0.04), -1px 2px 2px 0px rgba(0, 0, 0, 0.08), 0px 1px 1px 0px rgba(0, 0, 0, 0.08)',
+                'hard-lift':
+                    '0px 13px 5px 0px rgba(0, 0, 0, 0.01), 0px 8px 16px 0px rgba(0, 0, 0, 0.12), 0px 3px 3px 0px rgba(0, 0, 0, 0.16), 0px 1px 2px 0px rgba(0, 0, 0, 0.16)',
             },
             backgroundImage: {
                 'gradient-light':
                     'linear-gradient(180deg, #FFF 40%, #F9FAFB 100%)',
                 'gradient-md':
                     'linear-gradient(180deg, #FFF -20.08%, #F9FAFB 100%)',
+                'gradient-brain-dark':
+                    'linear-gradient(180deg, #0F172A 71.74%, #6366F1 110.37%)',
             },
         },
     },

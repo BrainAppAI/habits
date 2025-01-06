@@ -51,26 +51,29 @@ export function CalendarGrid({
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
     return (
-        <div>
+        <div className="flex-1 flex flex-col">
             <div className="grid grid-cols-7 border-b border-gray-200 bg-slate-50">
                 {dayNames.map((day) => (
                     <div
                         key={day}
-                        className="text-center font-normal text-slate-700 text-sm pb-1"
+                        className="text-right pr-2 font-normal text-slate-700 text-sm pb-1"
                     >
                         {day}
                     </div>
                 ))}
             </div>
 
-            <div className="grid grid-cols-7">
+            <div
+                className={`flex-1 grid grid-cols-7 ${
+                    allDays.length === 35 ? 'grid-rows-5' : 'grid-rows-6'
+                }`}
+            >
                 {allDays.map((date, index) => (
                     <div
                         key={date.toISOString()}
-                        className={`
-            border-b border-r border-gray-200
-            ${index % 7 === 0 ? 'border-l' : ''}
-          `}
+                        className={`border-b border-r border-gray-200 ${
+                            index % 7 === 0 ? 'border-l' : ''
+                        }`}
                     >
                         <CalendarDay
                             date={date}

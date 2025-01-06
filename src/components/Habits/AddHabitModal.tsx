@@ -1,97 +1,155 @@
 import React, { useState } from 'react'
 import { Habit } from '../../types/habit'
+import { HABIT_COLORS } from '../../utils/colorUtils'
 import {
-    COLORS_TO_CLASS,
-    HABIT_COLORS,
-    HabitColor,
-} from '../../utils/colorUtils'
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+} from '../ui/dialog'
+import Icons from '@/assets/icons'
+import { Button } from '../ui/button'
+import CheckMark from './CheckMark'
 
 interface AddHabitModalProps {
-    isOpen: boolean
-    onClose: () => void
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>
+    showModal: boolean
     onAdd: (habit: Omit<Habit, 'id' | 'createdAt'>) => void
     existingHabits: Habit[]
 }
 
-export function AddHabitModal({ isOpen, onClose, onAdd }: AddHabitModalProps) {
-    const [title, setTitle] = useState('')
-    const [color, setColor] = useState<HabitColor>(HABIT_COLORS[0])
+export function AddHabitModal({
+    setShowModal,
+    showModal,
 
-    if (!isOpen) return null
+    existingHabits,
+}: AddHabitModalProps) {
+    const [habits, setHabits] = useState<Habit[]>(
+        existingHabits.length ? existingHabits : []
+    )
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        onAdd({ title, color })
-        setTitle('')
-        setColor(color || HABIT_COLORS[0])
-        onClose()
+        if (habits.length && !habits[habits.length - 1].title) {
+            return null
+        }
+        const newHabit = {
+            id: crypto.randomUUID(),
+            createdAt: new Date().toISOString(),
+            title: '',
+            color: HABIT_COLORS[habits.length],
+        }
+        setHabits((habits) => [...habits, newHabit])
     }
 
+    const onClose = () => setShowModal(false)
+
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md">
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-bold">Add New Habit</h2>
-                    <button
-                        onClick={onClose}
-                        className="p-1 hover:bg-gray-100 rounded-full"
-                    >
-                        <div className="w-5 h-5">x</div>
-                    </button>
-                </div>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Habit Title
-                        </label>
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            required
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Color
-                        </label>
-                        <div className="flex gap-2 flex-wrap">
-                            {HABIT_COLORS.map((c) => {
-                                const bgColor = COLORS_TO_CLASS[c].BG
-                                const isSelected = color === c
-                                return (
+        <Dialog onOpenChange={setShowModal} open={showModal}>
+            <DialogContent className="sm:max-w-[420px]">
+                <Button
+                    onClick={onClose}
+                    variant="tertiary"
+                    size="sm"
+                    className="absolute top-4 right-4"
+                >
+                    <span>
+                        <Icons.Close size={18} />
+                    </span>
+                </Button>
+                <DialogHeader className="items-start justify-start w-full px-6">
+                    <DialogTitle className="text-[32px]">Habits</DialogTitle>
+                    <DialogDescription className="px-0 text-sm font-medium text-slate-600 -mt-1">
+                        8/8 habits added
+                    </DialogDescription>
+                </DialogHeader>
+                <form
+                    onSubmit={handleSubmit}
+                    className="w-full flex flex-col items-center justify-center px-6 pb-6"
+                >
+                    <div className="w-full flex flex-col gap-2 mb-6">
+                        {habits.map((habit) => {
+                            return (
+                                <li className="w-full group hover:bg-slate-50 rounded-lg transition-all p-2 ease-in-out duration-200 flex justify-between items-center group">
+                                    <div className="flex items-center flex-grow overflow-hidden">
+                                        <CheckMark
+                                            isChecked={false}
+                                            color={habit.color}
+                                        />
+                                        <input
+                                            className="w-full ml-3 text-left text-sm text-slate-950 transition-all ease-in-out duration-200 font-medium truncate overflow-hidden whitespace-nowrap leading-5 outline-none group-hover:bg-slate-50"
+                                            value={habit.title}
+                                            onChange={(e) => {
+                                                setHabits((habits) => {
+                                                    return habits.map((x) => {
+                                                        if (x.id === habit.id)
+                                                            return {
+                                                                ...x,
+                                                                title: e.target
+                                                                    .value,
+                                                            }
+                                                        return x
+                                                    })
+                                                })
+                                            }}
+                                        />
+                                    </div>
                                     <button
-                                        key={c}
-                                        type="button"
-                                        onClick={() => setColor(c)}
-                                        className={`w-8 h-8 rounded-lg transition-opacity ${bgColor} ${
-                                            isSelected
-                                                ? 'border-2 border-slate-700'
-                                                : ''
-                                        }`}
-                                    />
-                                )
-                            })}
-                        </div>
+                                        className="ml-auto group-hover:block hidden bg-transparent text-slate-400 hover:text-red-600 transition-all ease-in-out duration-200 flex-shrink-0"
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            e.stopPropagation()
+                                            e?.nativeEvent?.stopImmediatePropagation()
+                                            setHabits((habits) => {
+                                                return habits.filter(
+                                                    (x) => x.id !== habit.id
+                                                )
+                                            })
+                                        }}
+                                        onMouseDown={(e) => {
+                                            e.preventDefault()
+                                            e.stopPropagation()
+                                            setHabits((habits) => {
+                                                return habits.filter(
+                                                    (x) => x.id !== habit.id
+                                                )
+                                            })
+                                        }}
+                                    >
+                                        <span>
+                                            <Icons.Trash03 size={18} />
+                                        </span>
+                                    </button>
+                                </li>
+                            )
+                        })}
+
+                        {!habits.length ? (
+                            <p className="text-slate-400 text-sm text-center">
+                                No Habits yet.
+                            </p>
+                        ) : null}
                     </div>
-                    <div className="flex justify-end gap-2">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            Add Habit
-                        </button>
-                    </div>
+                    <Button
+                        variant="tertiary"
+                        type="submit"
+                        className="flex items-center gap-1"
+                        size="sm"
+                        disabled={
+                            habits.length
+                                ? !habits[habits.length - 1].title
+                                : false
+                        }
+                    >
+                        <span>
+                            <Icons.Plus size={18} />
+                        </span>
+                        Add Habit
+                        <span className="sr-only">Add New Habit</span>
+                    </Button>
                 </form>
-            </div>
-        </div>
+            </DialogContent>
+        </Dialog>
     )
 }

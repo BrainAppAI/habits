@@ -8,10 +8,10 @@ interface HabitsLegendProps {
 
 export function HabitsLegend({ habits }: HabitsLegendProps) {
     return (
-        <div className="flex items-center gap-40 bg-slate-900 px-6 py-8">
+        <div className="w-full flex items-center gap-40 bg-slate-900 px-8 py-6 mx-auto">
             <Icons.HabitsLogo />
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="flex flex-wrap gap-4">
                 {habits.map((habit) => (
                     <div
                         key={habit.id}

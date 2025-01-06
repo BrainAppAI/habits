@@ -14,19 +14,10 @@ export function CalendarHeader({
 }: CalendarHeaderProps) {
     return (
         <div className="flex items-center gap-4">
-            <Button
-                variant="tertiary"
-                size="sm"
-                onClick={onPrevMonth}
-                aria-label="Previous month"
-            >
-                <Icons.ArrowLeft size={16} />
-            </Button>
-
             <h1 className="text-[32px] text-gray-800 space-x-2">
                 <span className="font-semibold">
                     {currentDate.toLocaleString('default', {
-                        month: 'long',
+                        month: 'short',
                     })}
                 </span>
                 <span>
@@ -35,15 +26,24 @@ export function CalendarHeader({
                     })}
                 </span>
             </h1>
-
-            <Button
-                variant="tertiary"
-                size="sm"
-                onClick={onNextMonth}
-                aria-label="Next month"
-            >
-                <Icons.ArrowRight size={16} />
-            </Button>
+            <div className="flex items-center gap-0.5">
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={onPrevMonth}
+                    aria-label="Previous month"
+                >
+                    <Icons.ArrowLeft size={16} />
+                </Button>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={onNextMonth}
+                    aria-label="Next month"
+                >
+                    <Icons.ArrowRight size={16} />
+                </Button>
+            </div>
         </div>
     )
 }

@@ -19,11 +19,11 @@ const buttonVariants = cva(
                 ghost: 'hover:bg-accent hover:text-accent-foreground',
                 link: 'hover:text-slate-900 text-slate-700 underline-offset-4 hover:underline',
                 primary:
-                    'border border-indigo-700 bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 text-white shadow-btn-default hover:shadow-btn-hover active:shadow-btn-active',
+                    'border border-indigo-700 bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 text-white shadow-peck hover:shadow-popup active:shadow-soft-inset',
                 secondary:
-                    'border border-slate-950 bg-slate-700 hover:bg-slate-800 active:bg-slate-900 text-white shadow-btn-default hover:shadow-btn-hover active:shadow-btn-active',
+                    'border border-slate-950 bg-slate-700 hover:bg-slate-800 active:bg-slate-900 text-white shadow-peck hover:shadow-popup active:shadow-soft-inset',
                 tertiary:
-                    'border border-slate-300 bg-slate-50 hover:bg-slate-100 active:bg-slate-200 text-slate-950 shadow-btn-default hover:shadow-btn-hover active:shadow-btn-active',
+                    'border border-slate-300 bg-white text-slate-950 shadow-peck hover:shadow-popup active:shadow-soft-inset',
             },
             size: {
                 default: 'text-base rounded-xl h-10 px-4 py-1',
@@ -47,14 +47,8 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ({ className, variant, size, asChild = false, ...props }, ref) => {
         const Comp = asChild ? Slot : 'button'
-        const [scaling, setScaling] = React.useState(false)
 
         const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-            setScaling(true)
-            setTimeout(() => {
-                setScaling(false)
-            }, 100)
-
             props?.onClick?.(e)
         }
 
@@ -62,9 +56,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             <Comp
                 className={cn(buttonVariants({ variant, size, className }))}
                 ref={ref}
-                style={{
-                    transform: scaling ? 'scale(0.97)' : 'scale(1)',
-                }}
                 {...props}
                 onClick={handleClick}
             />
