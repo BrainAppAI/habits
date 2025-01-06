@@ -7,12 +7,20 @@ import { HabitsLegend } from './components/Habits/HabitsLegend'
 import { Habit, HabitCompletion } from './types/habit'
 import { Button } from './components/ui/button'
 import Icons from './assets/icons'
+import { HABIT_COLORS } from './utils/colorUtils'
 
 const MAX_HABITS = 10
 
 const App = () => {
     const [currentDate, setCurrentDate] = useState(new Date())
-    const [habits, setHabits] = useState<Habit[]>([])
+    const [habits, setHabits] = useState<Habit[]>([
+        {
+            title: 'Read a Book',
+            id: crypto.randomUUID(),
+            createdAt: new Date().toISOString(),
+            color: HABIT_COLORS[0],
+        },
+    ])
     const [completions, setCompletions] = useState<HabitCompletion[]>([])
     const [isAddHabitModalOpen, setIsAddHabitModalOpen] = useState(false)
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
