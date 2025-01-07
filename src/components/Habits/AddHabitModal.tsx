@@ -129,6 +129,7 @@ export function AddHabitModal({
                                                     })
                                                 })
                                             }}
+                                            maxLength={32}
                                         />
                                     </div>
                                     <button
