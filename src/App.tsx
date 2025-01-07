@@ -8,6 +8,8 @@ import { Button } from './components/ui/button'
 import Icons from './assets/icons'
 import { useHabitStorage } from './hooks/useHabitStorage'
 
+const IS_DEBUGGING = false
+
 const App = () => {
     const [currentDate, setCurrentDate] = useState(new Date())
     const [isAddHabitModalOpen, setIsAddHabitModalOpen] = useState(false)
@@ -24,6 +26,7 @@ const App = () => {
         unmarkHabitCompleted,
         setAllHabits,
         deleteHabit,
+        clearAllData,
     } = useHabitStorage(year, month)
 
     const handlePrevMonth = () => {
@@ -63,6 +66,8 @@ const App = () => {
                     onManageHabits={handleManageHabits}
                     onClickPrevMonth={handlePrevMonth}
                     onClickNextMonth={handleNextMonth}
+                    onDeleteAll={clearAllData}
+                    isDebugging={IS_DEBUGGING}
                 />
 
                 <CalendarGrid
@@ -102,19 +107,35 @@ const Header: React.FC<{
     onManageHabits: () => void
     onClickPrevMonth: () => void
     onClickNextMonth: () => void
-}> = ({ currentDate, onManageHabits, onClickPrevMonth, onClickNextMonth }) => (
-    <div className="flex justify-between bg-slate-50 items-center py-6 px-4">
+    onDeleteAll: () => void
+    isDebugging: boolean
+}> = ({
+    currentDate,
+    onManageHabits,
+    onClickPrevMonth,
+    onClickNextMonth,
+    onDeleteAll,
+    isDebugging,
+}) => (
+    <div className="flex justify-between bg-slate-50 items-center md:py-6 py-3 px-4">
         <CalendarHeader
             currentDate={currentDate}
             onPrevMonth={onClickPrevMonth}
             onNextMonth={onClickNextMonth}
         />
-        <Button onClick={onManageHabits} variant="tertiary" size="sm">
-            <span className="sm:block hidden">Manage Habits</span>
-            <span className="sm:hidden block">
-                <Icons.Settings size={18} />
-            </span>
-        </Button>
+        <div className="flex items-center gap-2">
+            {isDebugging ? (
+                <Button onClick={onDeleteAll} variant="tertiary" size="sm">
+                    <Icons.Trash03 size={18} />
+                </Button>
+            ) : null}
+            <Button onClick={onManageHabits} variant="tertiary" size="sm">
+                <span className="sm:block hidden">Manage Habits</span>
+                <span className="sm:hidden block">
+                    <Icons.Settings size={18} />
+                </span>
+            </Button>
+        </div>
     </div>
 )
 

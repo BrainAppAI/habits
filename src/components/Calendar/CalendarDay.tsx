@@ -28,7 +28,7 @@ export function CalendarDay({
     return (
         <button
             onClick={onClick}
-            className={`flex w-full h-full transition-colors duration-200 p-2 hover:bg-gray-50 relative justify-start    items-end ${
+            className={`flex w-full h-full transition-colors duration-200 pt-1 md:pb-4 pb-2 md:pl-3 pl-2 md:pr-2 pr-1 hover:bg-gray-50 relative justify-start items-end ${
                 isCurrentDay ? 'bg-gray-100 hover:bg-gray-200' : 'bg-white'
             }`}
         >

@@ -21,11 +21,14 @@ const CheckMark = ({
 
     return (
         <Component
-            className={`w-5 h-5 p-1.5 flex justify-center items-center text-white rounded-md border-[1.6px] ${bgBorderClasses}`}
+            className={`md:w-5 w-4 md:h-5 h-4 md:p-1.5 p-1 flex justify-center items-center text-white md:rounded-md rounded-sm border-[1.6px] ${bgBorderClasses}`}
             onClick={Component === 'button' ? onClick : undefined}
         >
-            <div>
+            <div className="md:block hidden">
                 <Icons.Check size={15} />
+            </div>
+            <div className="md:hidden block">
+                <Icons.Check size={10} />
             </div>
         </Component>
     )

@@ -72,6 +72,9 @@ export function AddHabitModal({
         setShowDeleteModal(true)
     }
 
+    const isHabitBtnDisabled =
+        !localHabits.at(-1)?.title || localHabits.length >= MAX_HABITS
+
     return (
         <Dialog
             onOpenChange={(s) => {
@@ -165,13 +168,7 @@ export function AddHabitModal({
                         type="submit"
                         className="flex items-center gap-1"
                         size="sm"
-                        disabled={
-                            localHabits.length
-                                ? !localHabits[localHabits.length - 1].title
-                                : localHabits.length >= MAX_HABITS
-                                ? true
-                                : false
-                        }
+                        disabled={isHabitBtnDisabled}
                     >
                         <span>
                             <Icons.Plus size={18} />
@@ -187,11 +184,15 @@ export function AddHabitModal({
                 description="Once deleted, it will not show up in the calendar, all completed instances for this habit will be lost forever."
                 setShowModal={setShowDeleteModal}
                 showModal={showDeleteModal}
-                onDeleteConfirmed={() =>
-                    deletingHabit.current
-                        ? handleDeleteHabit(deletingHabit.current)
-                        : null
-                }
+                onDeleteConfirmed={() => {
+                    if (deletingHabit.current) {
+                        setLocalHabits((habits) =>
+                            habits.filter((x) => x.id !== deletingHabit.current)
+                        )
+                        handleDeleteHabit(deletingHabit.current)
+                        setShowDeleteModal(false)
+                    }
+                }}
                 onDeleteDenied={() => setShowDeleteModal(false)}
                 confirmedBtnLoading={false}
             />
