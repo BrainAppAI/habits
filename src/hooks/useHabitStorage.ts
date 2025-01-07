@@ -73,6 +73,48 @@ export function useHabitStorage(year: number, month: number) {
         }
     }
 
+    async function deleteHabit(habitId: string) {
+        // Filter out the habit to be deleted
+        const updatedHabits = habits.filter((habit) => habit.id !== habitId)
+        setHabits(updatedHabits)
+
+        // Update storage with the new habits list
+        await chrome.storage.local.set({ [HABITS_KEY]: updatedHabits })
+
+        // Fetch all keys from storage
+        const storedData = await chrome.storage.local.get(null)
+        const completionKeys = Object.keys(storedData).filter((key) =>
+            key.startsWith(COMPLETIONS_PREFIX)
+        )
+
+        const updatedCompletions: Record<string, Completions> = {}
+
+        // Update all completion keys
+        for (const key of completionKeys) {
+            const completions: Completions = storedData[key]
+            const newCompletions: Completions = {}
+
+            for (const date in completions) {
+                const filteredCompletions = completions[date].filter(
+                    (id) => id !== habitId
+                )
+
+                if (filteredCompletions.length > 0) {
+                    newCompletions[date] = filteredCompletions
+                }
+            }
+
+            // Save the updated completions for the current key
+            updatedCompletions[key] = newCompletions
+            await chrome.storage.local.set({ [key]: newCompletions })
+        }
+
+        // Update state for the current month/year
+        if (updatedCompletions[completionKey]) {
+            setHabitCompletions(updatedCompletions[completionKey])
+        }
+    }
+
     async function clearAllData() {
         const keys = await chrome.storage.local.get(null)
         const keysToDelete = Object.keys(keys).filter(
@@ -89,6 +131,7 @@ export function useHabitStorage(year: number, month: number) {
         loading,
         createHabit,
         setAllHabits,
+        deleteHabit,
         markHabitCompleted,
         unmarkHabitCompleted,
         clearAllData,

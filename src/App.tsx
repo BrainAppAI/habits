@@ -23,6 +23,7 @@ const App = () => {
         markHabitCompleted,
         unmarkHabitCompleted,
         setAllHabits,
+        deleteHabit,
     } = useHabitStorage(year, month)
 
     const handlePrevMonth = () => {
@@ -80,6 +81,7 @@ const App = () => {
                 setShowModal={setIsAddHabitModalOpen}
                 showModal={isAddHabitModalOpen}
                 handleSetAllHabits={setAllHabits}
+                handleDeleteHabit={deleteHabit}
                 existingHabits={habits}
             />
 

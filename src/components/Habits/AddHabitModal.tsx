@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Habit } from '../../types/habit'
 import { HABIT_COLORS } from '../../utils/colorUtils'
 import {
@@ -11,34 +11,49 @@ import {
 import Icons from '@/assets/icons'
 import { Button } from '../ui/button'
 import CheckMark from './CheckMark'
+import DeleteConfirmationModal from './DeleteConfirmationModal'
 
 interface AddHabitModalProps {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>
     showModal: boolean
     existingHabits: Habit[]
     handleSetAllHabits: (habits: Habit[]) => void
+    handleDeleteHabit: (habitId: string) => void
 }
+
+const MAX_HABITS = 8
 
 export function AddHabitModal({
     setShowModal,
     showModal,
     existingHabits,
     handleSetAllHabits,
+    handleDeleteHabit,
 }: AddHabitModalProps) {
     const [localHabits, setLocalHabits] = useState<Habit[]>(
         existingHabits.length ? existingHabits : []
     )
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
+
+    //  Refs
+    const deletingHabit = useRef('')
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        if (localHabits.length && !localHabits[localHabits.length - 1].title) {
+        if (
+            (localHabits.length &&
+                !localHabits[localHabits.length - 1].title) ||
+            localHabits.length >= MAX_HABITS
+        ) {
             return null
         }
         const newHabit = {
             id: crypto.randomUUID(),
             createdAt: new Date().toISOString(),
             title: '',
-            color: HABIT_COLORS[localHabits.length],
+            color: HABIT_COLORS.filter(
+                (color) => !localHabits.some((x) => x.color === color)
+            )[0],
         }
         setLocalHabits((habits) => [...habits, newHabit])
     }
@@ -50,6 +65,11 @@ export function AddHabitModal({
         )
         handleSetAllHabits(validHabits)
         setLocalHabits(validHabits) // Reset to only valid habits
+    }
+
+    const setToDelete = (habitId: string) => {
+        deletingHabit.current = habitId
+        setShowDeleteModal(true)
     }
 
     return (
@@ -117,20 +137,12 @@ export function AddHabitModal({
                                             e.preventDefault()
                                             e.stopPropagation()
                                             e?.nativeEvent?.stopImmediatePropagation()
-                                            setLocalHabits((habits) => {
-                                                return habits.filter(
-                                                    (x) => x.id !== habit.id
-                                                )
-                                            })
+                                            setToDelete(habit.id)
                                         }}
                                         onMouseDown={(e) => {
                                             e.preventDefault()
                                             e.stopPropagation()
-                                            setLocalHabits((habits) => {
-                                                return habits.filter(
-                                                    (x) => x.id !== habit.id
-                                                )
-                                            })
+                                            setToDelete(habit.id)
                                         }}
                                     >
                                         <span>
@@ -155,6 +167,8 @@ export function AddHabitModal({
                         disabled={
                             localHabits.length
                                 ? !localHabits[localHabits.length - 1].title
+                                : localHabits.length >= MAX_HABITS
+                                ? true
                                 : false
                         }
                     >
@@ -166,6 +180,20 @@ export function AddHabitModal({
                     </Button>
                 </form>
             </DialogContent>
+
+            <DeleteConfirmationModal
+                title="You're about to delete this habit!"
+                description="Once deleted, it will not show up in the calendar, all completed instances for this habit will be lost forever."
+                setShowModal={setShowDeleteModal}
+                showModal={showDeleteModal}
+                onDeleteConfirmed={() =>
+                    deletingHabit.current
+                        ? handleDeleteHabit(deletingHabit.current)
+                        : null
+                }
+                onDeleteDenied={() => setShowDeleteModal(false)}
+                confirmedBtnLoading={false}
+            />
         </Dialog>
     )
 }
