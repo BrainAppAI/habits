@@ -53,6 +53,8 @@ export function CalendarGrid({
 
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
+    const gridRowsClass = `grid-rows-${Math.ceil(allDays.length / 7)}`
+
     return (
         <div className="flex-1 flex flex-col">
             {/* Day Names Header */}
@@ -68,11 +70,7 @@ export function CalendarGrid({
             </div>
 
             {/* Calendar Days */}
-            <div
-                className={`flex-1 grid grid-cols-7 ${
-                    allDays.length === 35 ? 'grid-rows-5' : 'grid-rows-6'
-                }`}
-            >
+            <div className={`flex-1 grid grid-cols-7 ${gridRowsClass}`}>
                 {allDays.map((date, index) => {
                     const isoDate = date.toISOString().split('T')[0]
                     const completionsForDay = habitCompletions[isoDate] || []

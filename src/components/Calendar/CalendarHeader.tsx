@@ -14,7 +14,7 @@ export function CalendarHeader({
 }: CalendarHeaderProps) {
     return (
         <div className="flex items-center gap-4">
-            <h1 className="text-[32px] text-gray-800 space-x-2">
+            <h1 className="text-[32px] text-gray-800 space-x-2 w-[150px]">
                 <span className="font-semibold">
                     {currentDate.toLocaleString('default', {
                         month: 'short',

@@ -8,13 +8,18 @@ interface HabitsLegendProps {
 
 export function HabitsLegend({ habits }: HabitsLegendProps) {
     return (
-        <div className="w-full flex items-center justify-between gap-10 bg-slate-900 md:px-8 px-4 md:py-6 py-3 mx-auto">
+        <div className="w-full flex items-center justify-between gap-6 mob:gap-10 bg-slate-900 md:px-8 px-4 md:py-6 py-3 mx-auto">
             <a
                 target="_blank"
                 href="https://brainapp.ai?ref=habits"
                 className="cursor-pointer"
             >
-                <Icons.HabitsLogo />
+                <span className="hidden md:block">
+                    <Icons.HabitsLogo />
+                </span>
+                <span className="block md:hidden">
+                    <Icons.BrainIcon />
+                </span>
             </a>
 
             <div className="flex flex-wrap md:gap-4 gap-2">

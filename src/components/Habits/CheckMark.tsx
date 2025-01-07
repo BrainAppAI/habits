@@ -21,14 +21,17 @@ const CheckMark = ({
 
     return (
         <Component
-            className={`md:w-5 w-4 md:h-5 h-4 md:p-1.5 p-1 flex justify-center items-center text-white md:rounded-md rounded-sm border-[1.6px] ${bgBorderClasses}`}
+            className={`md:w-5 mob:w-4 w-3.5 md:h-5 mob:h-4 h-3.5 mob:p-1 md:p-1.5 p-0.5 flex justify-center items-center text-white md:rounded-md rounded-sm border-[1.6px] ${bgBorderClasses}`}
             onClick={Component === 'button' ? onClick : undefined}
         >
-            <div className="md:block hidden">
+            <div className="hidden md:block mob:hidden">
                 <Icons.Check size={15} />
             </div>
-            <div className="md:hidden block">
+            <div className="hidden md:hidden mob:block">
                 <Icons.Check size={10} />
+            </div>
+            <div className="block md:hidden mob:hidden">
+                <Icons.Check size={8} />
             </div>
         </Component>
     )

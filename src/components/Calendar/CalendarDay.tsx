@@ -1,6 +1,6 @@
 import { Habit } from '../../types/habit'
-import { isToday } from './dateUtils'
 import CheckMark from '../Habits/CheckMark'
+import { isFuture, isToday } from 'date-fns'
 
 interface CalendarDayProps {
     date: Date
@@ -22,6 +22,7 @@ export function CalendarDay({
     const dateStr = date.toISOString().split('T')[0]
     const isCurrentDay = isToday(date)
     const isOtherMonth = date.getMonth() !== currentMonth
+    const isFutureDate = isFuture(date)
 
     const isHabitDone = (habitId: string) => completions?.includes(habitId)
 
@@ -41,27 +42,28 @@ export function CalendarDay({
             </span>
 
             <div className="flex flex-wrap gap-1">
-                {!isOtherMonth &&
-                    habits.map((habit) => {
-                        const isChecked = isHabitDone(habit.id)
+                {!isOtherMonth && !isFutureDate
+                    ? habits.map((habit) => {
+                          const isChecked = isHabitDone(habit.id)
 
-                        const handleClickCheckMark = (
-                            e: React.MouseEvent<HTMLElement>
-                        ) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                            onToggleHabit(habit.id, dateStr)
-                        }
+                          const handleClickCheckMark = (
+                              e: React.MouseEvent<HTMLElement>
+                          ) => {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              onToggleHabit(habit.id, dateStr)
+                          }
 
-                        return (
-                            <CheckMark
-                                isChecked={isChecked}
-                                color={habit.color}
-                                onClick={handleClickCheckMark}
-                                as="button"
-                            />
-                        )
-                    })}
+                          return (
+                              <CheckMark
+                                  isChecked={isChecked}
+                                  color={habit.color}
+                                  onClick={handleClickCheckMark}
+                                  as="button"
+                              />
+                          )
+                      })
+                    : null}
             </div>
         </button>
     )
