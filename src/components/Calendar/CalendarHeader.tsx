@@ -14,7 +14,7 @@ export function CalendarHeader({
 }: CalendarHeaderProps) {
     return (
         <div className="flex items-center gap-4">
-            <h1 className="text-[32px] text-gray-800 space-x-2 w-[150px]">
+            <h1 className="text-[32px] text-gray-800 dark:text-white space-x-2 w-[150px]">
                 <span className="font-semibold">
                     {currentDate.toLocaleString('default', {
                         month: 'short',
@@ -33,7 +33,7 @@ export function CalendarHeader({
                     onClick={onPrevMonth}
                     aria-label="Previous month"
                 >
-                    <Icons.ArrowLeft size={16} />
+                    <Icons.ChevronLeft size={16} />
                 </Button>
                 <Button
                     variant="ghost"
@@ -41,7 +41,7 @@ export function CalendarHeader({
                     onClick={onNextMonth}
                     aria-label="Next month"
                 >
-                    <Icons.ArrowRight size={16} />
+                    <Icons.ChevronRight size={16} />
                 </Button>
             </div>
         </div>

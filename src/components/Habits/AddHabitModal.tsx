@@ -12,6 +12,7 @@ import Icons from '@/assets/icons'
 import { Button } from '../ui/button'
 import CheckMark from './CheckMark'
 import DeleteConfirmationModal from './DeleteConfirmationModal'
+import DialogCloseButton from '../ui/dialog-close-btn'
 
 interface AddHabitModalProps {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>
@@ -72,8 +73,14 @@ export function AddHabitModal({
         setShowDeleteModal(true)
     }
 
+    const handleDialogClose = () => {
+        saveHabits()
+        setShowModal(false)
+    }
+
     const isHabitBtnDisabled =
-        !localHabits.at(-1)?.title || localHabits.length >= MAX_HABITS
+        (localHabits.length && !localHabits.at(-1)?.title) ||
+        localHabits.length >= MAX_HABITS
 
     return (
         <Dialog
@@ -84,19 +91,7 @@ export function AddHabitModal({
             open={showModal}
         >
             <DialogContent className="sm:max-w-[420px]">
-                <Button
-                    onClick={() => {
-                        saveHabits()
-                        setShowModal(false)
-                    }}
-                    variant="tertiary"
-                    size="sm"
-                    className="absolute top-4 right-4"
-                >
-                    <span>
-                        <Icons.Close size={18} />
-                    </span>
-                </Button>
+                <DialogCloseButton onClose={handleDialogClose} />
                 <DialogHeader className="items-start justify-start w-full px-6">
                     <DialogTitle className="text-[32px]">Habits</DialogTitle>
                     <DialogDescription className="px-0 text-sm font-medium text-slate-600 -mt-1">
@@ -110,14 +105,14 @@ export function AddHabitModal({
                     <div className="w-full flex flex-col gap-2 mb-6">
                         {localHabits.map((habit) => {
                             return (
-                                <li className="w-full group hover:bg-slate-50 rounded-lg transition-all p-2 ease-in-out duration-200 flex justify-between items-center group">
+                                <li className="w-full group hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-all p-2 ease-in-out duration-200 flex justify-between items-center group">
                                     <div className="flex items-center flex-grow overflow-hidden">
                                         <CheckMark
                                             isChecked={false}
                                             color={habit.color}
                                         />
                                         <input
-                                            className="w-full ml-3 text-left text-sm text-slate-950 transition-all ease-in-out duration-200 font-medium truncate overflow-hidden whitespace-nowrap leading-5 outline-none group-hover:bg-slate-50"
+                                            className="w-full ml-3 text-left text-sm bg-white dark:bg-slate-900 text-slate-950 dark:text-white transition-all ease-in-out duration-200 font-medium truncate overflow-hidden whitespace-nowrap leading-5 outline-none group-hover:bg-slate-50 dark:group-hover:bg-slate-800"
                                             value={habit.title}
                                             onChange={(e) => {
                                                 setLocalHabits((habits) => {

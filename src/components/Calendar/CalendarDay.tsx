@@ -28,21 +28,32 @@ export function CalendarDay({
 
     return (
         <button
-            onClick={onClick}
-            className={`flex w-full h-full transition-colors duration-200 pt-1 md:pb-4 pb-2 md:pl-3 pl-2 md:pr-2 pr-1 hover:bg-gray-50 relative justify-start items-end ${
-                isCurrentDay ? 'bg-gray-100 hover:bg-gray-200' : 'bg-white'
+            onClick={() => {
+                if (isFutureDate) return
+                onClick()
+            }}
+            className={`flex w-full h-full transition-colors duration-200 pt-1 md:pb-4 pb-2 md:pl-3 pl-2 md:pr-2 pr-1 ${
+                !isFutureDate
+                    ? 'hover:bg-gray-50 dark:hover:bg-slate-800'
+                    : 'cursor-default'
+            } relative justify-start items-end ${
+                isCurrentDay
+                    ? 'bg-gray-100 hover:bg-gray-200 dark:bg-slate-800'
+                    : 'bg-white dark:bg-slate-900 '
             }`}
         >
             <span
                 className={`absolute top-1 right-2 text-sm ${
-                    isOtherMonth ? 'text-gray-400' : 'text-gray-700'
+                    isOtherMonth
+                        ? 'text-gray-400 dark:text-gray-400'
+                        : 'text-gray-700 dark:text-white'
                 }`}
             >
                 {date.getDate()}
             </span>
 
             <div className="flex flex-wrap gap-1">
-                {!isOtherMonth && !isFutureDate
+                {!isOtherMonth
                     ? habits.map((habit) => {
                           const isChecked = isHabitDone(habit.id)
 
@@ -55,12 +66,14 @@ export function CalendarDay({
                           }
 
                           return (
-                              <CheckMark
-                                  isChecked={isChecked}
-                                  color={habit.color}
-                                  onClick={handleClickCheckMark}
-                                  as="button"
-                              />
+                              <div className={isFutureDate ? 'invisible' : ''}>
+                                  <CheckMark
+                                      isChecked={isChecked}
+                                      color={habit.color}
+                                      onClick={handleClickCheckMark}
+                                      as="button"
+                                  />
+                              </div>
                           )
                       })
                     : null}

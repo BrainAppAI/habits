@@ -7,6 +7,7 @@ import { HabitsLegend } from './components/Habits/HabitsLegend'
 import { Button } from './components/ui/button'
 import Icons from './assets/icons'
 import { useHabitStorage } from './hooks/useHabitStorage'
+import { ThemeProvider, useTheme } from './components/theme-provider'
 
 const IS_DEBUGGING = false
 
@@ -59,46 +60,48 @@ const App = () => {
         : []
 
     return (
-        <div className="min-h-screen md:py-10 py-6 md:px-20 px-6 bg-gradient-brain-dark">
-            <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-3rem)] flex flex-col bg-white shadow-dialog overflow-hidden w-full mx-auto rounded-xl">
-                <Header
-                    currentDate={currentDate}
-                    onManageHabits={handleManageHabits}
-                    onClickPrevMonth={handlePrevMonth}
-                    onClickNextMonth={handleNextMonth}
-                    onDeleteAll={clearAllData}
-                    isDebugging={IS_DEBUGGING}
+        <ThemeProvider defaultTheme="dark" storageKey="habits-ui-theme">
+            <div className="min-h-screen md:py-10 py-6 md:px-20 px-6 bg-gradient-brain-dark">
+                <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-3rem)] flex flex-col shadow-dialog overflow-hidden w-full mx-auto rounded-xl">
+                    <Header
+                        currentDate={currentDate}
+                        onManageHabits={handleManageHabits}
+                        onClickPrevMonth={handlePrevMonth}
+                        onClickNextMonth={handleNextMonth}
+                        onDeleteAll={clearAllData}
+                        isDebugging={IS_DEBUGGING}
+                    />
+
+                    <CalendarGrid
+                        currentDate={currentDate}
+                        habits={habits}
+                        habitCompletions={habitCompletions}
+                        handleToggleHabit={handleToggleHabit}
+                        onSelectDate={setSelectedDate}
+                    />
+
+                    <HabitsLegend habits={habits} />
+                </div>
+
+                <AddHabitModal
+                    key={habits.length} // Key is required to rerender the component when habits change
+                    setShowModal={setIsAddHabitModalOpen}
+                    showModal={isAddHabitModalOpen}
+                    handleSetAllHabits={setAllHabits}
+                    handleDeleteHabit={deleteHabit}
+                    existingHabits={habits}
                 />
 
-                <CalendarGrid
-                    currentDate={currentDate}
+                <DayHabitsModal
+                    isOpen={selectedDate !== null}
+                    onClose={() => setSelectedDate(null)}
+                    date={selectedDate ?? new Date()}
                     habits={habits}
-                    habitCompletions={habitCompletions}
-                    handleToggleHabit={handleToggleHabit}
-                    onSelectDate={setSelectedDate}
+                    onToggleHabit={handleToggleHabit}
+                    completions={selectedDayCompletions}
                 />
-
-                <HabitsLegend habits={habits} />
             </div>
-
-            <AddHabitModal
-                key={habits.length} // Key is required to rerender the component when habits change
-                setShowModal={setIsAddHabitModalOpen}
-                showModal={isAddHabitModalOpen}
-                handleSetAllHabits={setAllHabits}
-                handleDeleteHabit={deleteHabit}
-                existingHabits={habits}
-            />
-
-            <DayHabitsModal
-                isOpen={selectedDate !== null}
-                onClose={() => setSelectedDate(null)}
-                date={selectedDate ?? new Date()}
-                habits={habits}
-                onToggleHabit={handleToggleHabit}
-                completions={selectedDayCompletions}
-            />
-        </div>
+        </ThemeProvider>
     )
 }
 
@@ -116,27 +119,59 @@ const Header: React.FC<{
     onClickNextMonth,
     onDeleteAll,
     isDebugging,
-}) => (
-    <div className="flex justify-between bg-slate-50 items-center md:py-6 py-3 px-4">
-        <CalendarHeader
-            currentDate={currentDate}
-            onPrevMonth={onClickPrevMonth}
-            onNextMonth={onClickNextMonth}
-        />
-        <div className="flex items-center gap-2">
-            {isDebugging ? (
-                <Button onClick={onDeleteAll} variant="tertiary" size="sm">
-                    <Icons.Trash03 size={18} />
+}) => {
+    const { theme, setTheme } = useTheme()
+
+    const themeIcon =
+        theme === 'dark' ? (
+            <Icons.Laptop02 size={18} />
+        ) : theme === 'system' ? (
+            <Icons.Sun size={18} />
+        ) : (
+            <Icons.Moon size={18} />
+        )
+
+    const handleToggleTheme = () => {
+        switch (theme) {
+            case 'dark':
+                return setTheme('system')
+            case 'system':
+                return setTheme('light')
+            case 'light':
+                return setTheme('dark')
+            default:
+                return setTheme('dark')
+        }
+    }
+    return (
+        <div className="flex justify-between bg-slate-50 dark:bg-slate-800 dark:backdrop-blur-md items-center md:py-6 py-3 px-4">
+            <CalendarHeader
+                currentDate={currentDate}
+                onPrevMonth={onClickPrevMonth}
+                onNextMonth={onClickNextMonth}
+            />
+            <div className="flex items-center gap-2">
+                {isDebugging ? (
+                    <Button onClick={onDeleteAll} variant="tertiary" size="sm">
+                        <Icons.Trash03 size={18} />
+                    </Button>
+                ) : null}
+                <Button
+                    onClick={handleToggleTheme}
+                    variant="tertiary"
+                    size="sm"
+                >
+                    <span>{themeIcon}</span>
                 </Button>
-            ) : null}
-            <Button onClick={onManageHabits} variant="tertiary" size="sm">
-                <span className="sm:block hidden">Manage Habits</span>
-                <span className="sm:hidden block">
-                    <Icons.Settings size={18} />
-                </span>
-            </Button>
+                <Button onClick={onManageHabits} variant="tertiary" size="sm">
+                    <span className="sm:block hidden">Manage Habits</span>
+                    <span className="sm:hidden block">
+                        <Icons.Settings size={18} />
+                    </span>
+                </Button>
+            </div>
         </div>
-    </div>
-)
+    )
+}
 
 export default App

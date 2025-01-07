@@ -58,11 +58,11 @@ export function CalendarGrid({
     return (
         <div className="flex-1 flex flex-col">
             {/* Day Names Header */}
-            <div className="grid grid-cols-7 border-b border-gray-200 bg-slate-50">
+            <div className="grid grid-cols-7 border-b border-gray-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 dark:backdrop-blur-md">
                 {dayNames.map((day) => (
                     <div
                         key={day}
-                        className="text-right pr-2 font-normal text-slate-700 text-sm pb-1"
+                        className="text-right pr-2 font-normal text-slate-700 dark:text-white text-sm pb-1"
                     >
                         {day}
                     </div>
@@ -78,7 +78,7 @@ export function CalendarGrid({
                     return (
                         <div
                             key={isoDate}
-                            className={`border-b border-r border-gray-200 ${
+                            className={`border-b border-r border-gray-200 dark:border-slate-800 ${
                                 index % 7 === 0 ? 'border-l' : ''
                             }`}
                         >

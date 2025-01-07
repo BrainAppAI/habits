@@ -1,9 +1,8 @@
 import { Habit } from '../../types/habit'
 import CheckMark from './CheckMark'
-import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogTitle } from '../ui/dialog'
 import { DialogHeader } from '../ui/dialog'
-import Icons from '@/assets/icons'
+import DialogCloseButton from '../ui/dialog-close-btn'
 
 interface DayHabitsModalProps {
     isOpen: boolean
@@ -30,16 +29,7 @@ export function DayHabitsModal({
     return (
         <Dialog onOpenChange={(s) => (!s ? onClose() : null)} open={isOpen}>
             <DialogContent className="sm:max-w-[420px]">
-                <Button
-                    onClick={onClose}
-                    variant="tertiary"
-                    size="sm"
-                    className="absolute top-4 right-4"
-                >
-                    <span>
-                        <Icons.Close size={18} />
-                    </span>
-                </Button>
+                <DialogCloseButton onClose={onClose} />
                 <DialogHeader className="items-start justify-start w-full px-6">
                     <DialogTitle className="text-[32px]">
                         {date.toLocaleDateString('default', {
@@ -57,7 +47,7 @@ export function DayHabitsModal({
                             <button
                                 key={habit.id}
                                 onClick={() => onToggleHabit(habit.id, dateStr)}
-                                className="w-full group hover:bg-slate-50 rounded-lg p-2 transition-all ease-in-out duration-200 flex justify-between items-center group"
+                                className="w-full group hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg p-2 transition-all ease-in-out duration-200 flex justify-between items-center group"
                             >
                                 <div className="flex items-center gap-3 flex-grow overflow-hidden">
                                     <CheckMark
@@ -65,7 +55,7 @@ export function DayHabitsModal({
                                         color={habit.color}
                                     />
                                     <p
-                                        className={`text-sm font-medium line-clamp-1 text-slate-950 ${
+                                        className={`text-sm font-medium line-clamp-1 text-slate-950 dark:text-white ${
                                             isChecked ? 'line-through' : ''
                                         }`}
                                     >
