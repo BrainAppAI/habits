@@ -1,4 +1,4 @@
-import { Habit, HabitCompletion } from '../../types/habit'
+import { Habit } from '../../types/habit'
 import CheckMark from './CheckMark'
 import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogTitle } from '../ui/dialog'
@@ -10,8 +10,8 @@ interface DayHabitsModalProps {
     onClose: () => void
     date: Date
     habits: Habit[]
-    completions: HabitCompletion[]
-    onToggleHabit: (habitId: string, date: string, completed: boolean) => void
+    completions: string[]
+    onToggleHabit: (habitId: string, date: string) => void
 }
 
 export function DayHabitsModal({
@@ -25,6 +25,7 @@ export function DayHabitsModal({
     if (!isOpen) return null
 
     const dateStr = date.toISOString().split('T')[0]
+    const isHabitDone = (habitId: string) => completions?.includes(habitId)
 
     return (
         <Dialog onOpenChange={(s) => (!s ? onClose() : null)} open={isOpen}>
@@ -51,33 +52,21 @@ export function DayHabitsModal({
 
                 <div className="w-full flex flex-col gap-2 mb-6 px-4">
                     {habits.map((habit) => {
-                        const completion = completions.find(
-                            (c) => c.habitId === habit.id && c.date === dateStr
-                        )
+                        const isChecked = isHabitDone(habit.id)
                         return (
                             <button
                                 key={habit.id}
-                                onClick={() =>
-                                    onToggleHabit(
-                                        habit.id,
-                                        dateStr,
-                                        !completion?.completed
-                                    )
-                                }
+                                onClick={() => onToggleHabit(habit.id, dateStr)}
                                 className="w-full group hover:bg-slate-50 rounded-lg p-2 transition-all ease-in-out duration-200 flex justify-between items-center group"
                             >
                                 <div className="flex items-center gap-3 flex-grow overflow-hidden">
                                     <CheckMark
-                                        isChecked={Boolean(
-                                            completion?.completed
-                                        )}
+                                        isChecked={isChecked}
                                         color={habit.color}
                                     />
                                     <p
                                         className={`text-sm font-medium line-clamp-1 text-slate-950 ${
-                                            completion?.completed
-                                                ? 'line-through'
-                                                : ''
+                                            isChecked ? 'line-through' : ''
                                         }`}
                                     >
                                         {habit.title}

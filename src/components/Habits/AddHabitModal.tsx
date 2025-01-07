@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Habit } from '../../types/habit'
 import { HABIT_COLORS } from '../../utils/colorUtils'
 import {
@@ -15,33 +15,53 @@ import CheckMark from './CheckMark'
 interface AddHabitModalProps {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>
     showModal: boolean
-    onAdd: (habit: Omit<Habit, 'id' | 'createdAt'>) => void
     existingHabits: Habit[]
+    handleCreateMultipleHabits: (habits: Habit[]) => void
 }
 
 export function AddHabitModal({
     setShowModal,
     showModal,
-
     existingHabits,
+    handleCreateMultipleHabits,
 }: AddHabitModalProps) {
-    const [habits, setHabits] = useState<Habit[]>(
+    const [localHabits, setLocalHabits] = useState<Habit[]>(
         existingHabits.length ? existingHabits : []
     )
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        if (habits.length && !habits[habits.length - 1].title) {
+        if (localHabits.length && !localHabits[localHabits.length - 1].title) {
             return null
         }
         const newHabit = {
             id: crypto.randomUUID(),
             createdAt: new Date().toISOString(),
             title: '',
-            color: HABIT_COLORS[habits.length],
+            color: HABIT_COLORS[localHabits.length],
         }
-        setHabits((habits) => [...habits, newHabit])
+        setLocalHabits((habits) => [...habits, newHabit])
     }
+
+    useEffect(() => {
+        if (!showModal) {
+            // Modal is getting closed
+            const newHabitsToSave = localHabits.filter((habit) => {
+                // Habit should have a title
+                return (
+                    habit.title &&
+                    !existingHabits.some((x) => x.id === habit.id)
+                )
+            })
+
+            setLocalHabits([])
+
+            console.log('new habits to save', newHabitsToSave)
+            if (newHabitsToSave.length)
+                handleCreateMultipleHabits(newHabitsToSave)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [showModal, existingHabits])
 
     const onClose = () => setShowModal(false)
 
@@ -61,7 +81,7 @@ export function AddHabitModal({
                 <DialogHeader className="items-start justify-start w-full px-6">
                     <DialogTitle className="text-[32px]">Habits</DialogTitle>
                     <DialogDescription className="px-0 text-sm font-medium text-slate-600 -mt-1">
-                        {habits.length}/8 habits added
+                        {localHabits.length}/8 habits added
                     </DialogDescription>
                 </DialogHeader>
                 <form
@@ -69,7 +89,7 @@ export function AddHabitModal({
                     className="w-full flex flex-col items-center justify-center px-4 pb-6"
                 >
                     <div className="w-full flex flex-col gap-2 mb-6">
-                        {habits.map((habit) => {
+                        {localHabits.map((habit) => {
                             return (
                                 <li className="w-full group hover:bg-slate-50 rounded-lg transition-all p-2 ease-in-out duration-200 flex justify-between items-center group">
                                     <div className="flex items-center flex-grow overflow-hidden">
@@ -81,7 +101,7 @@ export function AddHabitModal({
                                             className="w-full ml-3 text-left text-sm text-slate-950 transition-all ease-in-out duration-200 font-medium truncate overflow-hidden whitespace-nowrap leading-5 outline-none group-hover:bg-slate-50"
                                             value={habit.title}
                                             onChange={(e) => {
-                                                setHabits((habits) => {
+                                                setLocalHabits((habits) => {
                                                     return habits.map((x) => {
                                                         if (x.id === habit.id)
                                                             return {
@@ -101,7 +121,7 @@ export function AddHabitModal({
                                             e.preventDefault()
                                             e.stopPropagation()
                                             e?.nativeEvent?.stopImmediatePropagation()
-                                            setHabits((habits) => {
+                                            setLocalHabits((habits) => {
                                                 return habits.filter(
                                                     (x) => x.id !== habit.id
                                                 )
@@ -110,7 +130,7 @@ export function AddHabitModal({
                                         onMouseDown={(e) => {
                                             e.preventDefault()
                                             e.stopPropagation()
-                                            setHabits((habits) => {
+                                            setLocalHabits((habits) => {
                                                 return habits.filter(
                                                     (x) => x.id !== habit.id
                                                 )
@@ -125,7 +145,7 @@ export function AddHabitModal({
                             )
                         })}
 
-                        {!habits.length ? (
+                        {!localHabits.length ? (
                             <p className="text-slate-400 text-sm text-center">
                                 No Habits yet.
                             </p>
@@ -137,8 +157,8 @@ export function AddHabitModal({
                         className="flex items-center gap-1"
                         size="sm"
                         disabled={
-                            habits.length
-                                ? !habits[habits.length - 1].title
+                            localHabits.length
+                                ? !localHabits[localHabits.length - 1].title
                                 : false
                         }
                     >

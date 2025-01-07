@@ -4,38 +4,26 @@ import { CalendarGrid } from './components/Calendar/CalendarGrid'
 import { AddHabitModal } from './components/Habits/AddHabitModal'
 import { DayHabitsModal } from './components/Habits/DayHabitsModal'
 import { HabitsLegend } from './components/Habits/HabitsLegend'
-import { Habit, HabitCompletion } from './types/habit'
 import { Button } from './components/ui/button'
 import Icons from './assets/icons'
-import { HABIT_COLORS } from './utils/colorUtils'
-
-const MAX_HABITS = 10
+import { useHabitStorage } from './hooks/useHabitStorage'
 
 const App = () => {
     const [currentDate, setCurrentDate] = useState(new Date())
-    const [habits, setHabits] = useState<Habit[]>([
-        {
-            title: 'Read a Book',
-            id: crypto.randomUUID(),
-            createdAt: new Date().toISOString(),
-            color: HABIT_COLORS[0],
-        },
-        {
-            title: 'Workout',
-            id: crypto.randomUUID(),
-            createdAt: new Date().toISOString(),
-            color: HABIT_COLORS[1],
-        },
-        {
-            title: 'Build',
-            id: crypto.randomUUID(),
-            createdAt: new Date().toISOString(),
-            color: HABIT_COLORS[2],
-        },
-    ])
-    const [completions, setCompletions] = useState<HabitCompletion[]>([])
     const [isAddHabitModalOpen, setIsAddHabitModalOpen] = useState(false)
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+
+    const year = currentDate.getFullYear()
+    const month = currentDate.getMonth()
+
+    // Use the custom hook to fetch and manage habit completions
+    const {
+        habits,
+        habitCompletions,
+        markHabitCompleted,
+        unmarkHabitCompleted,
+        createMultipleHabits,
+    } = useHabitStorage(year, month)
 
     const handlePrevMonth = () => {
         setCurrentDate(
@@ -49,43 +37,22 @@ const App = () => {
         )
     }
 
-    const handleAddHabit = (newHabit: Omit<Habit, 'id' | 'createdAt'>) => {
-        if (habits.length >= MAX_HABITS) {
-            alert('Maximum number of habits reached (10)')
-            return
+    const handleToggleHabit = (habitId: string, date: string) => {
+        const isCompleted = habitCompletions[date]?.includes(habitId)
+        if (isCompleted) {
+            unmarkHabitCompleted(habitId, date)
+        } else {
+            markHabitCompleted(habitId, date)
         }
-
-        setHabits([
-            ...habits,
-            {
-                ...newHabit,
-                id: crypto.randomUUID(),
-                createdAt: new Date().toISOString(),
-            },
-        ])
-    }
-
-    const handleToggleHabit = (
-        habitId: string,
-        date: string,
-        completed: boolean
-    ) => {
-        setCompletions((prev) => {
-            const existing = prev.find(
-                (c) => c.habitId === habitId && c.date === date
-            )
-            if (existing) {
-                return prev.map((c) =>
-                    c.habitId === habitId && c.date === date
-                        ? { ...c, completed }
-                        : c
-                )
-            }
-            return [...prev, { habitId, date, completed }]
-        })
     }
 
     const handleManageHabits = () => setIsAddHabitModalOpen(true)
+
+    const selectedDayCompletions = selectedDate
+        ? habitCompletions[selectedDate.toISOString().split('T')[0]]
+            ? habitCompletions[selectedDate.toISOString().split('T')[0]]
+            : []
+        : []
 
     return (
         <div className="min-h-screen md:py-10 py-6 md:px-20 px-6 bg-gradient-brain-dark">
@@ -100,9 +67,9 @@ const App = () => {
                 <CalendarGrid
                     currentDate={currentDate}
                     habits={habits}
-                    completions={completions}
+                    habitCompletions={habitCompletions}
+                    handleToggleHabit={handleToggleHabit}
                     onSelectDate={setSelectedDate}
-                    onToggleHabit={handleToggleHabit}
                 />
 
                 <HabitsLegend habits={habits} />
@@ -111,7 +78,7 @@ const App = () => {
             <AddHabitModal
                 setShowModal={setIsAddHabitModalOpen}
                 showModal={isAddHabitModalOpen}
-                onAdd={handleAddHabit}
+                handleCreateMultipleHabits={createMultipleHabits}
                 existingHabits={habits}
             />
 
@@ -120,8 +87,8 @@ const App = () => {
                 onClose={() => setSelectedDate(null)}
                 date={selectedDate ?? new Date()}
                 habits={habits}
-                completions={completions}
                 onToggleHabit={handleToggleHabit}
+                completions={selectedDayCompletions}
             />
         </div>
     )

@@ -1,4 +1,4 @@
-import { Habit, HabitCompletion } from '../../types/habit'
+import { Habit } from '../../types/habit'
 import { isToday } from './dateUtils'
 import CheckMark from '../Habits/CheckMark'
 
@@ -6,9 +6,9 @@ interface CalendarDayProps {
     date: Date
     currentMonth: number
     habits: Habit[]
-    completions: HabitCompletion[]
+    completions: string[]
     onClick: () => void
-    onToggleHabit: (habitId: string, date: string, completed: boolean) => void
+    onToggleHabit: (habitId: string, date: string) => void
 }
 
 export function CalendarDay({
@@ -23,12 +23,7 @@ export function CalendarDay({
     const isCurrentDay = isToday(date)
     const isOtherMonth = date.getMonth() !== currentMonth
 
-    const getHabitStatus = (habit: Habit) => {
-        const completion = completions.find(
-            (c) => c.habitId === habit.id && c.date === dateStr
-        )
-        return { completed: completion?.completed ?? false }
-    }
+    const isHabitDone = (habitId: string) => completions?.includes(habitId)
 
     return (
         <button
@@ -48,19 +43,19 @@ export function CalendarDay({
             <div className="flex flex-wrap gap-1">
                 {!isOtherMonth &&
                     habits.map((habit) => {
-                        const status = getHabitStatus(habit)
+                        const isChecked = isHabitDone(habit.id)
 
                         const handleClickCheckMark = (
                             e: React.MouseEvent<HTMLElement>
                         ) => {
                             e.preventDefault()
                             e.stopPropagation()
-                            onToggleHabit(habit.id, dateStr, !status.completed)
+                            onToggleHabit(habit.id, dateStr)
                         }
 
                         return (
                             <CheckMark
-                                isChecked={status.completed}
+                                isChecked={isChecked}
                                 color={habit.color}
                                 onClick={handleClickCheckMark}
                                 as="button"

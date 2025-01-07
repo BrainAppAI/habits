@@ -7,8 +7,6 @@ export interface Habit {
     createdAt: string // ISO date string
 }
 
-export interface HabitCompletion {
-    habitId: string
-    date: string // ISO date string
-    completed: boolean
+export interface Completions {
+    [day: string]: string[] // Map of ISO date string to habit IDs
 }
