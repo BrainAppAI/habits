@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Habit } from '../../types/habit'
 import { HABIT_COLORS } from '../../utils/colorUtils'
 import {
@@ -16,14 +16,14 @@ interface AddHabitModalProps {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>
     showModal: boolean
     existingHabits: Habit[]
-    handleCreateMultipleHabits: (habits: Habit[]) => void
+    handleSetAllHabits: (habits: Habit[]) => void
 }
 
 export function AddHabitModal({
     setShowModal,
     showModal,
     existingHabits,
-    handleCreateMultipleHabits,
+    handleSetAllHabits,
 }: AddHabitModalProps) {
     const [localHabits, setLocalHabits] = useState<Habit[]>(
         existingHabits.length ? existingHabits : []
@@ -43,33 +43,29 @@ export function AddHabitModal({
         setLocalHabits((habits) => [...habits, newHabit])
     }
 
-    useEffect(() => {
-        if (!showModal) {
-            // Modal is getting closed
-            const newHabitsToSave = localHabits.filter((habit) => {
-                // Habit should have a title
-                return (
-                    habit.title &&
-                    !existingHabits.some((x) => x.id === habit.id)
-                )
-            })
-
-            setLocalHabits([])
-
-            console.log('new habits to save', newHabitsToSave)
-            if (newHabitsToSave.length)
-                handleCreateMultipleHabits(newHabitsToSave)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [showModal, existingHabits])
-
-    const onClose = () => setShowModal(false)
+    const saveHabits = () => {
+        // Filter out habits without titles
+        const validHabits = localHabits.filter(
+            (habit) => habit.title.trim() !== ''
+        )
+        handleSetAllHabits(validHabits)
+        setLocalHabits(validHabits) // Reset to only valid habits
+    }
 
     return (
-        <Dialog onOpenChange={setShowModal} open={showModal}>
+        <Dialog
+            onOpenChange={(s) => {
+                if (!s) saveHabits()
+                setShowModal(s)
+            }}
+            open={showModal}
+        >
             <DialogContent className="sm:max-w-[420px]">
                 <Button
-                    onClick={onClose}
+                    onClick={() => {
+                        saveHabits()
+                        setShowModal(false)
+                    }}
                     variant="tertiary"
                     size="sm"
                     className="absolute top-4 right-4"

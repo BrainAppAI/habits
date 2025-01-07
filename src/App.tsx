@@ -22,7 +22,7 @@ const App = () => {
         habitCompletions,
         markHabitCompleted,
         unmarkHabitCompleted,
-        createMultipleHabits,
+        setAllHabits,
     } = useHabitStorage(year, month)
 
     const handlePrevMonth = () => {
@@ -76,9 +76,10 @@ const App = () => {
             </div>
 
             <AddHabitModal
+                key={habits.length} // Key is required to rerender the component when habits change
                 setShowModal={setIsAddHabitModalOpen}
                 showModal={isAddHabitModalOpen}
-                handleCreateMultipleHabits={createMultipleHabits}
+                handleSetAllHabits={setAllHabits}
                 existingHabits={habits}
             />
 

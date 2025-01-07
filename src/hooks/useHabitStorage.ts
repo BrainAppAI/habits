@@ -39,10 +39,10 @@ export function useHabitStorage(year: number, month: number) {
         await chrome.storage.local.set({ [HABITS_KEY]: updatedHabits })
     }
 
-    async function createMultipleHabits(mHabits: Habit[]) {
-        const updatedHabits = [...habits, ...mHabits]
-        setHabits(updatedHabits)
-        await chrome.storage.local.set({ [HABITS_KEY]: updatedHabits })
+    async function setAllHabits(allHabits: Habit[]) {
+        if (!Array.isArray(allHabits) || !allHabits.length) return
+        setHabits(allHabits)
+        await chrome.storage.local.set({ [HABITS_KEY]: allHabits })
     }
 
     async function markHabitCompleted(habitId: string, date: string) {
@@ -88,7 +88,7 @@ export function useHabitStorage(year: number, month: number) {
         habitCompletions,
         loading,
         createHabit,
-        createMultipleHabits,
+        setAllHabits,
         markHabitCompleted,
         unmarkHabitCompleted,
         clearAllData,
