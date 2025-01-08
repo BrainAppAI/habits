@@ -71,7 +71,7 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
     <div
         className={cn(
-            'w-full flex flex-col sm:flex-row sm:justify-end px-4 py-3 bg-slate-50 border-t border-slate-300 rounded-b-2xl',
+            'w-full flex flex-col sm:flex-row sm:justify-end px-4 py-3 bg-slate-50 dark:bg-slate-800 border-t border-slate-300 dark:border-slate-700 rounded-b-2xl',
             className
         )}
         {...props}
@@ -97,7 +97,10 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <DialogPrimitive.Description
         ref={ref}
-        className={cn('text-sm px-4 text-slate-600', className)}
+        className={cn(
+            'text-sm px-4 text-slate-600 dark:text-slate-400',
+            className
+        )}
         {...props}
     />
 ))

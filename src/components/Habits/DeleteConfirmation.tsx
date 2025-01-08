@@ -14,7 +14,6 @@ interface DeleteConfirmationModalProps {
     description?: string
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>
     showModal: boolean
-    confirmedBtnLoading: boolean
 }
 
 const DeleteConfirmationModal = ({
@@ -22,14 +21,13 @@ const DeleteConfirmationModal = ({
     description,
     showModal,
     setShowModal,
-    confirmedBtnLoading,
 }: DeleteConfirmationModalProps) => {
     return (
         <Dialog onOpenChange={setShowModal} open={showModal}>
             <DialogContent className="sm:max-w-[360px]">
                 <DialogHeader>
                     <div className="mb-3 text-red-500">
-                        <Icons.ArrowLeft size={32} />
+                        <Icons.Trash03 size={32} />
                     </div>
                     <DialogTitle>{title}</DialogTitle>
                     {description ? (
@@ -42,13 +40,7 @@ const DeleteConfirmationModal = ({
                             Cancel
                         </Button>
                         <Button variant="destructive" size="xs">
-                            {confirmedBtnLoading ? (
-                                <span className="animate-spin">
-                                    <Icons.ArrowLeft size={14} />
-                                </span>
-                            ) : (
-                                'Delete'
-                            )}
+                            Delete
                         </Button>
                     </div>
                 </DialogFooter>
