@@ -123,26 +123,11 @@ const Header: React.FC<{
     const { theme, setTheme } = useTheme()
 
     const themeIcon =
-        theme === 'dark' ? (
-            <Icons.Laptop02 size={18} />
-        ) : theme === 'system' ? (
-            <Icons.Sun size={18} />
-        ) : (
-            <Icons.Moon size={18} />
-        )
+        theme === 'dark' ? <Icons.Sun size={18} /> : <Icons.Moon size={18} />
 
-    const handleToggleTheme = () => {
-        switch (theme) {
-            case 'dark':
-                return setTheme('system')
-            case 'system':
-                return setTheme('light')
-            case 'light':
-                return setTheme('dark')
-            default:
-                return setTheme('dark')
-        }
-    }
+    const handleToggleTheme = () =>
+        setTheme(theme === 'dark' ? 'light' : 'dark')
+
     return (
         <div className="flex justify-between bg-slate-50 dark:bg-slate-800 dark:backdrop-blur-md items-center md:py-6 py-3 px-4">
             <CalendarHeader
@@ -156,11 +141,7 @@ const Header: React.FC<{
                         <Icons.Trash03 size={18} />
                     </Button>
                 ) : null}
-                <Button
-                    onClick={handleToggleTheme}
-                    variant="tertiary"
-                    size="sm"
-                >
+                <Button onClick={handleToggleTheme} variant="ghost" size="sm">
                     <span>{themeIcon}</span>
                 </Button>
                 <Button onClick={onManageHabits} variant="tertiary" size="sm">
