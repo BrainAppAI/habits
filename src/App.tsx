@@ -62,7 +62,7 @@ const App = () => {
     return (
         <ThemeProvider defaultTheme="dark" storageKey="habits-ui-theme">
             <div className="min-h-screen md:py-10 py-6 md:px-20 px-6 bg-gradient-brain-dark">
-                <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-3rem)] flex flex-col shadow-dialog overflow-hidden w-full mx-auto rounded-xl">
+                <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-3rem)] flex flex-col shadow-dialog overflow-hidden w-full max-w-[1300px] mx-auto rounded-xl">
                     <Header
                         currentDate={currentDate}
                         onManageHabits={handleManageHabits}
