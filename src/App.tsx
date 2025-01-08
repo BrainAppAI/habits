@@ -144,7 +144,23 @@ const Header: React.FC<{
                 <Button onClick={handleToggleTheme} variant="ghost" size="sm">
                     <span>{themeIcon}</span>
                 </Button>
-                <Button onClick={onManageHabits} variant="tertiary" size="sm">
+                <Button
+                    onClick={onManageHabits}
+                    variant="tertiary"
+                    size="sm"
+                    className="dark:hidden"
+                >
+                    <span className="sm:block hidden">Manage Habits</span>
+                    <span className="sm:hidden block">
+                        <Icons.Settings size={18} />
+                    </span>
+                </Button>
+                <Button
+                    onClick={onManageHabits}
+                    variant="secondary"
+                    size="sm"
+                    className="dark:block hidden"
+                >
                     <span className="sm:block hidden">Manage Habits</span>
                     <span className="sm:hidden block">
                         <Icons.Settings size={18} />

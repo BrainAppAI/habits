@@ -16,7 +16,7 @@ const DialogCloseButton = ({ onClose }: { onClose: () => void }) => {
             </Button>
             <Button
                 onClick={onClose}
-                variant="ghost"
+                variant="secondary"
                 size="sm"
                 className="dark:block hidden absolute top-4 right-4"
             >
