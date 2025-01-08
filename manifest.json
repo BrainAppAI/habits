@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Habits by Brain",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Track your habits in every new tab",
     "permissions": ["storage"],
     "chrome_url_overrides": {
